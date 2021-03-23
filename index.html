@@ -1,0 +1,38 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sort Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="body">
+        <header>
+            <h1>Sorting Algoritham Visualizer</h1>
+        </header>
+        <nav id="nav">
+            <label for="algoritham"> Choose type of Algoritham : </label>
+            <select name="algoritham" id="algoritham">
+                <option value="QuickSort">Quick Sort</option>
+                <option value="BubbleSort">Bubble Sort</option>
+                <option value="MergeSort">Merge Sort</option>
+                <option value="InsertionSort">Insertion Sort</option>
+                <option value="SelectionSort">Selection Sort</option>
+                <option value="HeapSort">Heap Sort</option>
+            </select>
+            <input type="text" name="Num" id="Num" placeholder="Number of items">
+            <button type="submit" id="clear">Clear</button>
+            <button type="submit" id="draw">Draw</button>
+            <button type="submit" id="shuffle">Shuffle</button>
+            <button type="submit" id="run">Run</button>
+        </nav>
+        <div id="canvas">
+        </div>
+    </div>
+    <script src="./script.js"></script>
+</body>
+
+</html>

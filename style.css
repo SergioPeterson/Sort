@@ -1,0 +1,21 @@
+#body {
+	text-align: center;
+	padding: 1% 5%;
+}
+#canvas {
+	display: flex;
+	margin-top: 5%;
+	height: 72%;
+	width: 100%;
+	background-color: rgba(128, 128, 128, 0.356);
+}
+
+.block {
+	background-color: rgb(210, 228, 243);
+	border: 1px solid black;
+}
+
+.selected {
+	background-color: aqua;
+	border: 1px solid blue;
+}
