@@ -7,23 +7,41 @@ const runB = document.getElementById("run")
 const canvas = document.getElementById("canvas")
 let GlobalArr = [];
 let loop;
-clearB.addEventListener("click", clear)
+let value = 600;
+
+
+// Clear board, start from zero
+clearB.addEventListener("click", end)
+
+//Draws the items in order
 drawB.addEventListener("click", () => {
-    setHeightArray(items.value)
+    if(items.value < value){
+        value = items.value;
+    }
+    setHeightArray(value)
     GlobalArr.sort((a,b) => a < b)
     draw(GlobalArr);
+    value = 600;
 })
+
+//Shuffles the items by size
 shuffleB.addEventListener("click", () => {
-    setHeightArray(items.value)
+    if(items.value < value){
+        value = items.value;
+    }
+    setHeightArray(value)
     shuffle(GlobalArr);
     draw(GlobalArr);
+    value = 600;
 })
+
+//Runs the program at a given algoritham
 runB.addEventListener("click", () =>{
     const alg = algortham.value;
     run(alg)
 })
 
-
+// Sets the global array given a number of items
 function setHeightArray(n){
     const height = canvas.clientHeight;
     const step = height / n;
@@ -34,42 +52,52 @@ function setHeightArray(n){
         arr.unshift(current)
     }
     GlobalArr = arr
-    return arr
 }
 
-function draw(a){
+//draws the blocks of the Global Array
+function draw(arr){
     clear()
     const n = items.value;
     const width = getWidth(n)
-    for (let index = 0; index < a.length; index++) {
-        addBlock(a[index], width);
+    for (let index = 0; index < arr.length; index++) {
+        addBlock(arr[index], width);
         
     }
 }
-function shuffle(a){
-    var currentIndex = a.length, temporaryValue, randomIndex;
+
+//Shuffles the GlobalArr
+function shuffle(){
+    var currentIndex = GlobalArr.length, temporaryValue, randomIndex;
     while (0 !== currentIndex) {
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex -= 1;
-      temporaryValue = a[currentIndex];
-      a[currentIndex] = a[randomIndex];
-      a[randomIndex] = temporaryValue;
+      temporaryValue = GlobalArr[currentIndex];
+      GlobalArr[currentIndex] = GlobalArr[randomIndex];
+      GlobalArr[randomIndex] = temporaryValue;
     }
-    GlobalArr = a
-    return a;
 }
 
+//clears the canvas 
 function clear(){
+    console.log("Clearing...")
     while(canvas.firstElementChild){
         canvas.removeChild(canvas.firstElementChild)
     }
 }
 
+//ends the program
+function end(){
+    GlobalArr = []
+    clear()
+}
+
+//return the width given the number of items
 function getWidth(n){
     const width = canvas.clientWidth;
     return width/n;
 }
 
+//Draws a block given a height and width
 function addBlock(height, width){
     const num = canvas.childElementCount;
     let b = document.createElement("div");
@@ -80,13 +108,14 @@ function addBlock(height, width){
     canvas.appendChild(b)
 }
 
+//Runs the specifed Algoritham
 function run(al){
     if(al == "QuickSort"){
 
     }else if( al == "BubbleSort"){
         BubbleSort();
     }else if( al == "MergeSort"){
-        
+        MergeSort(GlobalArr);
     }else if( al == "InsertionSort"){
         
     }else if( al == "SelectionSort"){
@@ -98,29 +127,96 @@ function run(al){
     }
 }
 
-
-function BubbleSort(){
-    let count = 0;
-    loop = setInterval(() => {
-        BubbleSortHelper(GlobalArr)
-        count = count + 1;
-        console.log("Ran..")
-        check(GlobalArr, loop)
-    }, 500)
+//Functions for quick sort
+function QuickSort(){
+    //
+}
+function QuickSortHelper(){
+    //
 }
 
-function BubbleSortHelper(arr){
-    let node = arr[0];
-    for(let index = 1; index < arr.length; index++){
-        if(arr[index-1] > arr[index]){
-            let holder = arr[index]
-            arr[index] = arr[index-1]
-            arr[index-1] = holder
-        }else{
-            node = arr[index]
+
+
+
+
+//Functions for bubble sort
+function BubbleSort(){
+    loop = setInterval(() => {
+        BubbleSortHelper()
+        console.log("Ranning Bubble Sort..")
+        check(GlobalArr, loop)
+    }, 250)
+}
+
+function BubbleSortHelper(){
+    let val = GlobalArr.length-1;
+    for(let index = 1; index < GlobalArr.length; index++){
+        if(GlobalArr[index-1] > GlobalArr[index]){
+            let holder = GlobalArr[index]
+            GlobalArr[index] = GlobalArr[index-1]
+            GlobalArr[index-1] = holder
+            val = index;
         }
-        draw(arr)
     }
+    draw(GlobalArr);
+    select(val)
+}
+
+
+
+//Functions for quick sort
+function MergeSort(arr){
+    let drawArr = []
+    if(arr.length == 1){
+        return arr
+    }
+    const half = Math.ceil(arr.length/2);
+    let firstHalf = arr.splice(0, half);
+    let secondHalf = arr.splice(-half);
+    // drawArr = [...firstHalf] + [...secondHalf]
+    // draw(drawArr)
+    firstHalf = MergeSort(firstHalf)
+    secondHalf = MergeSort(secondHalf)
+
+
+    return Merge(firstHalf,secondHalf)
+}
+function Merge(arr1, arr2){
+    let arr3 = []
+    while(arr1.length != 0 && arr2.length != 0){
+        if(arr1[0] > arr2[0]){
+            arr3.push(arr2[0])
+            arr2.splice(0,1)
+        }else{
+            arr3.push(arr1[0])
+            arr1.splice(0,1);
+        }
+        drawArr = [...arr3] + [...arr1] +[...arr2];
+    }
+    while(arr1.length != 0){
+        arr3.push(arr1[0])
+        arr1.splice(0,1);
+        drawArr = [...arr3] + [...arr1] +[...arr2];
+    }
+    while(arr2.length != 0){
+        arr3.push(arr1[0])
+        arr2.splice(0,1)
+        drawArr = [...arr3] + [...arr1] +[...arr2];
+    }
+    return arr3
+}
+
+
+
+
+
+
+
+function select(index){
+    clean();
+    let b = document.getElementsByClassName(index)[0];
+    b.classList.remove("block")
+    b.classList.add("selected")
 }
 
 function check(arr, val){
@@ -142,7 +238,14 @@ function equalArr(a1, a2){
     return true;
 }
 
-// function select()
+function clean(){
+    for(let index = 0; index < canvas.childElementCount; index++){
+        const node = document.getElementsByClassName(index)[0];
+        node.classList.remove("selected")
+        node.classList.add("block")
+    }
+}
+
 function finish(){
     for (let index = 0; index < canvas.childElementCount; index++) {
         const element = canvas.getElementsByClassName(index)[0]
